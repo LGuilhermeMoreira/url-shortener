@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXIST `urls` (
+    `short_id` VARCHAR(10) NOT NULL UNIQUE,
+    `url` TEXT NOT NULL,
+)
