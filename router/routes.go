@@ -12,5 +12,7 @@ func CreateRouter(db database.UrlDb) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /encurtar", h.HandleGenerateShortID)
 	mux.HandleFunc("GET /{id}", h.HandleRedirect)
+	mux.HandleFunc("GET /ping", h.HandlePing)
+	mux.HandleFunc("GET /", h.HandleTempl)
 	return mux
 }
