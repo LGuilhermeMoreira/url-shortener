@@ -1,30 +1,81 @@
 package public
+
 // study:https://templ.guide/
-css Base(){
-    background-color: #f1f1f1;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+css Base() {
+	background-color: #008b8b;
+	font-family: Arial, sans-serif;
+	font-size: 16px;
+	flex-direction: column;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-script Do(){
-    console.log("Hello World");
+css Title() {
+	color: #fff;
+	font-size: 24px;
+	margin: 10px;
+}
+
+css Input() {
+	display: block;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin: 10px;
+	width: 300px;
+}
+
+css Div() {
+	display: block;
+	justify-content: center;
+	align-items: center;
+    flex-direction: row;
+	padding: 10px;
+	font-size: 16px;
+	margin: 10px;
+	width: 300px;
+    color: #fff;
+}
+
+script Do() {
+        const input = document.querySelector('input');
+        const div = document.querySelector('#Show');
+        const url = input.value;
+        fetch('/encurtar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({url})
+        }).then(res => res.json())
+        .then(data => {
+            console.log(data.status)
+            if(data.status === 406){
+                div.innerHTML = `<p>${data.msg}</p>`;
+            }else{
+                div.innerHTML = `<p><a href="${data.complete_url}" target="_blank">${data.short_id}</a></p>`;
+            }
+        });
 }
 
 templ Encurtar() {
-    <html>
-        <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Encurtar URL</title>
-        </head>
-        <body>
-           <h1 class={Base()} >Encurtar URL</h1>
-        </body>
-    </html>
-
-
+	<html>
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Encurtar URL</title>
+		</head>
+		<body class={ Base() }>
+			<h1 class={ Title() }>Encurtar URL</h1>
+			<input class={ Input() } type="text" placeholder="Digite a url"/>
+			<button onclick={ Do() }>Encurtar</button>
+			<div id="Show" class={ Div() }></div>
+		</body>
+	</html>
 }
