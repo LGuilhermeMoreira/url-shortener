@@ -24,6 +24,13 @@ func (h *Handler) HandleGenerateShortID(w http.ResponseWriter, r *http.Request) 
 	w.Header().Add("Content-Type", "application/json")
 	var input dto.InputUrl
 	json.NewDecoder(r.Body).Decode(&input)
+
+	if input.URL == "" {
+		msg := entity.NewHandleError("URL vazia", http.StatusNotAcceptable)
+		json.NewEncoder(w).Encode(msg)
+		return
+	}
+
 	model, err := input.ConvertToModel()
 	if err != nil {
 		msg := entity.NewHandleError("Erro ao converter input para model: "+err.Error(), http.StatusInternalServerError)
@@ -66,3 +73,5 @@ func (h *Handler) HandlePing(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(body)
 }
+
+//===================
