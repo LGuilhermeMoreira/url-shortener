@@ -30,10 +30,7 @@ func (d UrlDb) Store(entity *model.Url) error {
 func (d UrlDb) FindByID(key string) (*model.Url, error) {
 	var id, url string
 
-	err := d.Db.QueryRow("SELECT short_id,url FROM urls WHERE short_id = $1", key).Scan(&id, &url)
-	if err != nil {
-		return nil, err
-	}
+	d.Db.QueryRow("SELECT u.short_id, u.url FROM urls u WHERE u.short_id = $1", key).Scan(&id, &url)
 
 	return &model.Url{
 		CompleteUrl: url,

@@ -1,0 +1,21 @@
+version: "3.9"
+# test database
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: minha_senha
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "3303:3303"
+    depends_on:
+      - db

@@ -41,8 +41,8 @@ css Div() {
 	margin: 10px;
 	width: 300px;
     color: #fff;
+	text-align: center;
 }
-
 script Do() {
         const input = document.querySelector('input');
         const div = document.querySelector('#Show');
@@ -55,11 +55,13 @@ script Do() {
             body: JSON.stringify({url})
         }).then(res => res.json())
         .then(data => {
-            console.log(data.status)
-            if(data.status === 406){
+            console.log(data,data.status)
+            if(data.status !== 201){
                 div.innerHTML = `<p>${data.msg}</p>`;
             }else{
-                div.innerHTML = `<p><a href="${data.complete_url}" target="_blank">${data.short_id}</a></p>`;
+                div.innerHTML = `<p>
+					ID da URL: ${data.short_id}
+				</p>`;
             }
         });
 }

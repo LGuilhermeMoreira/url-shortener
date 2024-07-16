@@ -67,6 +67,7 @@ func Div() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`margin:10px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`width:300px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`color:#fff;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`text-align:center;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`Div`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,
@@ -76,8 +77,8 @@ func Div() templ.CSSClass {
 
 func Do() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Do_d791`,
-		Function: `function __templ_Do_d791(){const input = document.querySelector('input');
+		Name: `__templ_Do_c0df`,
+		Function: `function __templ_Do_c0df(){const input = document.querySelector('input');
         const div = document.querySelector('#Show');
         const url = input.value;
         fetch('/encurtar', {
@@ -88,15 +89,18 @@ func Do() templ.ComponentScript {
             body: JSON.stringify({url})
         }).then(res => res.json())
         .then(data => {
-            if(data.status === 406){
+            console.log(data,data.status)
+            if(data.status !== 201){
                 div.innerHTML = ` + "`" + `<p>${data.msg}</p>` + "`" + `;
             }else{
-                div.innerHTML = ` + "`" + `<p><a href="${data.url}" target="_blank">${data.url}</a></p>` + "`" + `;
+                div.innerHTML = ` + "`" + `<p>
+					ID da URL: ${data.short_id}
+				</p>` + "`" + `;
             }
         });
 }`,
-		Call:       templ.SafeScript(`__templ_Do_d791`),
-		CallInline: templ.SafeScriptInline(`__templ_Do_d791`),
+		Call:       templ.SafeScript(`__templ_Do_c0df`),
+		CallInline: templ.SafeScriptInline(`__templ_Do_c0df`),
 	}
 }
 

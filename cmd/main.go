@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	database.Migration(conn)
 	urlDb := database.UrlDb{Db: conn}
 	mux := router.CreateRouter(urlDb)
 
@@ -25,8 +26,6 @@ func main() {
 		Addr:    fmt.Sprintf(":%v", c.Port),
 		Handler: mux,
 	}
-
-	fmt.Printf("server on http://localhost:%v/ 🔥\n", c.Port)
 	err = server.ListenAndServe()
 	if err != nil {
 		panic(err)

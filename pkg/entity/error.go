@@ -3,7 +3,7 @@ package entity
 import "encoding/json"
 
 type HandleError struct {
-	Msg    string `json:"msg"`
+	Msg    string `json:"message"`
 	Status uint   `json:"status"`
 }
 

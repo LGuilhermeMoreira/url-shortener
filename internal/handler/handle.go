@@ -2,7 +2,9 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"regexp"
 
 	"github.com/LGuilhermeMoreira/url-shortener/internal/dto"
 	"github.com/LGuilhermeMoreira/url-shortener/internal/infra/database"
@@ -25,8 +27,8 @@ func (h *Handler) HandleGenerateShortID(w http.ResponseWriter, r *http.Request) 
 	var input dto.InputUrl
 	json.NewDecoder(r.Body).Decode(&input)
 
-	if input.URL == "" {
-		msg := entity.NewHandleError("URL vazia", http.StatusNotAcceptable)
+	if !validate(input.URL) {
+		msg := entity.NewHandleError("URL está com problema", http.StatusNotAcceptable)
 		json.NewEncoder(w).Encode(msg)
 		return
 	}
@@ -43,16 +45,23 @@ func (h *Handler) HandleGenerateShortID(w http.ResponseWriter, r *http.Request) 
 		json.NewEncoder(w).Encode(msg)
 		return
 	}
-	json.NewEncoder(w).Encode(model)
+	output := input.ConvertToOutput(http.StatusCreated, model.ShortID)
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(output)
+	if err != nil {
+		msg := entity.NewHandleError("Error ao fazer o encode: "+err.Error(), http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(msg)
+	}
 }
 func (h *Handler) HandleRedirect(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	model, err := h.DB.FindByID(id)
 	if err != nil {
-		msg := entity.NewHandleError("Erro ao buscar ID no banco de dados", http.StatusInternalServerError)
+		msg := entity.NewHandleError("Erro ao buscar ID no banco de dados: "+err.Error(), http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(msg)
 		return
 	}
+	fmt.Println(model)
 	if model == nil {
 		msg := entity.NewHandleError("ID não encontrado", http.StatusNotFound)
 		json.NewEncoder(w).Encode(msg)
@@ -74,4 +83,11 @@ func (h *Handler) HandlePing(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(body)
 }
 
-//===================
+func validate(url string) bool {
+	if url == "" {
+		return false
+	}
+	regex := regexp.MustCompile(`^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$`)
+	isValid := regex.MatchString(url)
+	return isValid
+}
