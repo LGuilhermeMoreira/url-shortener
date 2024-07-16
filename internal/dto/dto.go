@@ -10,7 +10,7 @@ type InputUrl struct {
 }
 
 type OutputUrl struct {
-	URL     string `json:"complete_url"`
+	URL     string `json:"url"`
 	ShortID string `json:"short_id"`
 	Status  uint   `json:"status"`
 }

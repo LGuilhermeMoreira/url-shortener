@@ -57,10 +57,10 @@ script Do() {
         .then(data => {
             console.log(data,data.status)
             if(data.status !== 201){
-                div.innerHTML = `<p>${data.msg}</p>`;
+                div.innerHTML = `<p>${data.message}</p>`;
             }else{
                 div.innerHTML = `<p>
-					ID da URL: ${data.short_id}
+					<a href="${data.url}" target="_blank">${data.short_id}</a>
 				</p>`;
             }
         });

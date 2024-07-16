@@ -77,8 +77,8 @@ func Div() templ.CSSClass {
 
 func Do() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Do_c0df`,
-		Function: `function __templ_Do_c0df(){const input = document.querySelector('input');
+		Name: `__templ_Do_62d1`,
+		Function: `function __templ_Do_62d1(){const input = document.querySelector('input');
         const div = document.querySelector('#Show');
         const url = input.value;
         fetch('/encurtar', {
@@ -91,16 +91,16 @@ func Do() templ.ComponentScript {
         .then(data => {
             console.log(data,data.status)
             if(data.status !== 201){
-                div.innerHTML = ` + "`" + `<p>${data.msg}</p>` + "`" + `;
+                div.innerHTML = ` + "`" + `<p>${data.message}</p>` + "`" + `;
             }else{
                 div.innerHTML = ` + "`" + `<p>
-					ID da URL: ${data.short_id}
+					<a href="${data.url}" target="_blank">${data.short_id}</a>
 				</p>` + "`" + `;
             }
         });
 }`,
-		Call:       templ.SafeScript(`__templ_Do_c0df`),
-		CallInline: templ.SafeScriptInline(`__templ_Do_c0df`),
+		Call:       templ.SafeScript(`__templ_Do_62d1`),
+		CallInline: templ.SafeScriptInline(`__templ_Do_62d1`),
 	}
 }
 
